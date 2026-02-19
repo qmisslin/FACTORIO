@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Factor10</title>
+        <link rel="stylesheet" href="src/style.css">
+
+        <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.js"></script>
+    </head>
+
+    <body>
+
+        <div id="viewport"></div>
+
+        <div id="ui-layer">
+
+            <div id="window-home" class="floating-window"></div>
+
+            <div id="window-assets" class="floating-window hidden">
+                <div class="window-content">
+                    <div id="asset-preview-container"></div>
+
+                    <div class="assets-controls">
+                        <select id="asset-select"></select>
+
+                        <label for="input-import-glb" class="action-btn full-width" style="margin:0;">Import GLB</label>
+                        <input type="file" id="input-import-glb" accept=".glb,.gltf">
+
+                        <div class="transform-grid">
+                            <span>Pos</span>
+                            <input type="number" id="asset-pos-x" step="0.1"><input type="number" id="asset-pos-y"
+                                step="0.1"><input type="number" id="asset-pos-z" step="0.1">
+                            <span>Rot</span>
+                            <input type="number" id="asset-rot-x" step="15"><input type="number" id="asset-rot-y"
+                                step="15"><input type="number" id="asset-rot-z" step="15">
+                            <span>Scl</span>
+                            <input type="number" id="asset-scl-x" step="0.1"><input type="number" id="asset-scl-y"
+                                step="0.1"><input type="number" id="asset-scl-z" step="0.1">
+                        </div>
+
+                        <button id="btn-reset-transform" class="action-btn full-width">Reset Transform</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="window-code" class="floating-window hidden">
+                <div class="window-content no-padding" id="code-container"></div>
+            </div>
+
+            <div id="window-result" class="floating-window hidden">
+                <div class="window-content">
+                    <div id="graphs-container" class="graphs-container"></div>
+                    <div style="flex-shrink: 0; margin-top: 15px;">
+                        <button id="btn-export-csv" class="action-btn full-width">Export CSV</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="bottom-dock">
+            <div class="dock-section">
+                <button class="dock-btn" data-target="window-home" title="Home">
+                    <svg viewBox="0 0 1600 1600">
+                        <path
+                            d="m495.98438 95c-.25978.004-.50774.10921-.69141.29297l-6 6c-.20558.20572-.2948.45907-.29297.70703v.5c.00003.27613.22387.49997.5.5h.5v5.5c.00003.27613.22387.49997.5.5h3.5v-5.5c.00003-.27613.22387-.49997.5-.5h3c.27613.00003.49997.22387.5.5v5.5h3.5c.27613-.00003.49997-.22387.5-.5v-5.5h.5c.27613-.00003.49997-.22387.5-.5v-.5c.004-.25043-.0852-.49916-.29297-.70703l-6-6c-.19132-.19141-.45207-.29711-.72265-.29297z"
+                            transform="matrix(100 0 0 100 -48800.005 -9399.994)" />
+                    </svg>
+                </button>
+                <button class="dock-btn" data-target="window-assets" title="Assets">
+                    <svg viewBox="0 0 1600 1600">
+                        <path
+                            d="m366.5 389a.50005.50005 0 0 0 -.35352.14648l-3 3a.50005.50005 0 0 0 -.14648.35352v10a.50005.50005 0 0 0 .5.5h10a.50005.50005 0 0 0 .35352-.14648l3-3a.50005.50005 0 0 0 .14648-.35352v-10a.50005.50005 0 0 0 -.5-.5zm.20703 1h8.58008l-1.99414 2h-8.58594zm9.29297.70117v8.5918l-2 2v-8.58789zm-12 2.29883h9v9h-9z"
+                            transform="matrix(100 0 0 100 -36199.362 -38800.234)" />
+                    </svg>
+                </button>
+                <button class="dock-btn" data-target="window-code" title="Code">
+                    <svg viewBox="0 0 1600 1600">
+                        <g transform="matrix(100 0 0 100 -133100.845 27200.072)">
+                            <path
+                                d="m1339.5-270a.5.5 0 1 0 0 1h6a.5.5 0 1 0 0-1zm0 3a.5.5 0 1 0 0 1h6a.5.5 0 1 0 0-1zm0 3a.5.5 0 1 0 0 1h6a.5.5 0 1 0 0-1zm-7 3a.5.5 0 1 0 0 1h13a.5.5 0 1 0 0-1zm-.014 3a.5.5 0 1 0 0 1h13.0449a.5.5 0 1 0 0-1z" />
+                            <path
+                                d="m1332.4922-263c-.2761-.004-.4965-.23166-.4922-.50781v-5.08789c0-.86662.4883-1.66406 1.2578-2.08789.7696-.42387 1.709-.42387 2.4785 0 .7695.42383 1.2559 1.22127 1.2559 2.08789v5.08789c.01.67616-1.0096.67616-1 0v-2.49219h-2.9922v2.49219c0 .28226-.2255.51222-.5078.50781zm.5078-4h2.9922v-1.5957c0-.49379-.2728-.95455-.7383-1.21094-.4655-.25638-1.0482-.25638-1.5137 0-.4655.25639-.7402.71715-.7402 1.21094z" />
+                        </g>
+                    </svg>
+                </button>
+                <button class="dock-btn" data-target="window-result" title="Results">
+                    <svg viewBox="0 0 1600 1600">
+                        <g transform="matrix(100 0 0 100 -6800 -3100)">
+                            <path
+                                d="m81.75 32.099609c-1.433114 0-2.573994.599965-3.328125 1.414063s-1.193245 1.779187-1.615234 2.65039c-.42199.871204-.825206 1.64712-1.308594 2.146485s-.99066.789062-1.998047.789062h-4.5v2h4.5c1.476988 0 2.648427-.585302 3.435547-1.398437s1.246208-1.787219 1.671875-2.666016c.425667-.878796.819561-1.663707 1.28125-2.162109s.919442-.773438 1.861328-.773438h1.25v-2z" />
+                            <path
+                                d="m27 536.90039v1.19922h.75c.646429 0 1.301953.38 1.880859 1.04297.578907.66296 1.046871 1.58637 1.289063 2.49023.207018.77346 1.367174.46292 1.160156-.31054-.287808-1.07411-.818828-2.13723-1.544922-2.96875-.726093-.83153-1.681585-1.45313-2.785156-1.45313zm13.25 9c-1.91571 0-2.93215.90502-3.558594 1.66992-.313222.38245-.555819.7142-.798828.91797-.243008.20377-.458964.3125-.892578.3125-.401011 0-.71548-.20341-1.054688-.64648-.339207-.44308-.639641-1.1033-.878906-1.79492-.238226-.80225-1.442094-.38505-1.132812.39257.260735.7537.585301 1.5146 1.058594 2.13282.473292.61821 1.158823 1.11523 2.007812 1.11523.691386 0 1.25668-.25378 1.662109-.59375s.678457-.73364.958985-1.07617c.561056-.68506 1.044616-1.23047 2.628906-1.23047h.75v-1.19922z"
+                                opacity=".7" transform="translate(42 -503.9)" />
+                        </g>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="dock-section">
+                <button class="dock-btn toggle active" id="toggle-grid" title="Toggle Grid">
+                    <svg viewBox="0 0 1800 1800">
+                        <path
+                            d="m467.5 10.000005a.50005006.50005006 0 0 0 -.5.5v15a.50005006.50005006 0 0 0 .5.5h15a.50005006.50005006 0 0 0 .5-.5v-15a.50005006.50005006 0 0 0 -.5-.5zm.5.999999h4v4h-4zm5 0h4v4h-4zm5 0h4v4h-4zm-10 5h4v4.000001h-4zm5 0h4v4.000001h-4zm5 0h4v4.000001h-4zm-10 5.000001h4v4h-4zm5 0h4v4h-4zm5 0h4v4h-4z"
+                            transform="matrix(100 0 0 100 -46599.99999999999 -900)" />
+                    </svg>
+                </button>
+                <button class="dock-btn toggle active" id="toggle-links" title="Toggle Links">
+                    <svg viewBox="0 0 1600 1600">
+                        <path
+                            d="m27.5 410a.50005.50005 0 0 0 -.5.5v3a.50005.50005 0 0 0 .5.5h.949219l3.550781 6.62695v2.87305a.50005.50005 0 0 0 .5.5h3a.50005.50005 0 0 0 .5-.5v-2.87305l3.550781-6.62695h.949219a.50005.50005 0 0 0 .5-.5v-3a.50005.50005 0 0 0 -.5-.5h-3a.50005.50005 0 0 0 -.5.5v.5h-6v-.5a.50005.50005 0 0 0 -.5-.5zm.5 1h2v2h-2zm10 0h2v2h-2zm-7 1h6v1.5a.50005.50005 0 0 0 .5.5h.914062l-3.214843 6h-2.398438l-3.214843-6h.914062a.50005.50005 0 0 0 .5-.5zm2 9h2v2h-2z"
+                            fill-rule="evenodd" transform="matrix(100 0 0 100 -2600 -40900)" />
+                    </svg>
+                </button>
+                <button class="dock-btn toggle active" id="toggle-text" title="Toggle Text">
+                    <svg height="1600" viewBox="0 0 1500 1600" width="1500">
+                        <g>
+                            <path
+                                d="m96.5 473c-2.087116 0-3.478164 1.04607-4.390625 2.1875a.50024408.50024408 0 0 0 .78125.625c.799863-1.00057 1.843763-1.8125 3.609375-1.8125 2.098393 0 3.134109.87695 3.75195 1.94531.61785 1.06836.74805 2.3712.74805 3.05469h-5.25c-1.273438 0-2.443243.36418-3.314453 1.05469s-1.427734 1.72791-1.427735 2.94531c.000001 1.2174.556525 2.2548 1.427735 2.94531s2.041015 1.05469 3.314453 1.05469h.75c1.755585 0 3.387714-.96684 4.53711-2.0332.0781.53303.28951 1.00434.64062 1.35547.45089.45088 1.09727.67773 1.82227.67773a.50005.50005 0 1 0 0-1c-.525 0-.87862-.14815-1.11523-.38477-.23662-.23661-.38477-.59023-.38477-1.11523v-5.5c0-.79721-.12242-2.24322-.88086-3.55469-.75844-1.31146-2.222681-2.44531-4.61914-2.44531zm-.75 7h5.25v3.56055c-.95418 1.12418-2.81125 2.43945-4.5 2.43945h-.75c-1.081007 0-2.03187-.31555-2.693359-.83984-.66149-.52429-1.048828-1.23676-1.048829-2.16016.000001-.9234.387339-1.63587 1.048829-2.16016s1.612352-.83984 2.693359-.83984z"
+                                transform="matrix(100 0 0 100 -9000.7467 -47200.0025)" />
+                        </g>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="dock-section">
+                <button class="dock-btn" id="sim-reset" title="Reset">
+                    <svg viewBox="0 0 1600 1600">
+                        <g transform="matrix(100 0 0 100 -2600 -28300)">
+                            <path
+                                d="m48.5 267c-.276131.00003-.499972.22387-.5.5v9c.000028.27613.223869.49997.5.5h13c.276131-.00003.499972-.22387.5-.5v-6c-.000028-.27613-.223869-.49997-.5-.5h-7.5v-2.5c-.000028-.27613-.223869-.49997-.5-.5zm.5 1h4v2h-4zm0 3h2v2h-2zm3 0h4v2h-4zm5 0h4v2h-4zm-8 3h4v2h-4zm5 0h4v2h-4zm5 0h2v2h-2z"
+                                transform="translate(-21 21)" />
+                            <path
+                                d="m40.5 284a.50005.50005 0 0 1 .5.5v3a.50005.50005 0 0 1 -.5.5h-5a.50005.50005 0 0 1 -.5-.5v-3a.50005.50005 0 0 1 .5-.5zm-.5 1h-4v2h4z"
+                                opacity=".5" />
+                        </g>
+                    </svg>
+                </button>
+                <button class="dock-btn" id="sim-play" title="Play">
+                    <svg viewBox="0 0 1200 1400">
+                        <path
+                            d="m29.959614 221.99997c-.53618.022-.95938.4634-.95898 1v10c.00072.7847.8635 1.2629 1.5293.8477l8-5c.625909-.3918.625909-1.3036 0-1.6954l-8-5c-.17045-.107-.36922-.1601-.57032-.1523z"
+                            fill-rule="evenodd" transform="matrix(100 0 0 100 -2800 -22099.999)" />
+                    </svg>
+                </button>
+                <button class="dock-btn" id="sim-pause" title="Pause">
+                    <svg viewBox="0 0 1000 1400">
+                        <path d="m-1207 502.79592v14.44898h2v-14.44898zm6 0v14.44898h2v-14.44898z"
+                            transform="matrix(100 0 0 83.0508 120800.005 -41657.6031)" />
+                    </svg>
+                </button>
+
+                <div class="tick-control">
+                    <button id="tick-down" class="mini-btn"><svg viewBox="0 0 1100 1100">
+                            <path d="M949.976 500a50.025 50.025 0 1 1 0 100.05H150.024a50.025 50.025 0 1 1 0-100.05z" />
+                        </svg></button>
+                    <span id="tick-display">500ms</span>
+                    <button id="tick-up" class="mini-btn"><svg viewBox="0 0 1100 1100">
+                            <path
+                                d="m118.51367 601a.50005001.50005001 0 0 0 -.50586.50586v3.50195h-3.50195a.50005001.50005001 0 1 0 0 .99805h3.50195v3.50195a.50005001.50005001 0 1 0 .99805 0v-3.50195h3.50195a.50005001.50005001 0 1 0 0-.99805h-3.50195v-3.50195a.50005001.50005001 0 0 0 -.49219-.50586z"
+                                transform="matrix(99.99975 0 0 99.99975 -11300.654 -60001.84)" />
+                        </svg></button>
+                </div>
+            </div>
+
+        </div>
+
+        <script type="module" src="src/app.js"></script>
+    </body>
+
+</html>

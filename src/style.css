@@ -1,0 +1,367 @@
+:root {
+    --bg-dark: #1e1e1e;
+    --bg-panel: #252526;
+    --bg-input: #333333;
+    --text-main: #f0f0f0;
+    --text-muted: #aaaaaa;
+    --accent: #4772b3;
+    --accent-hover: #5a85c6;
+    --border-radius: 12px;
+    --dock-bg: rgba(30, 30, 30, 0.95);
+    
+    --dock-height: 80px;
+    --window-margin: 20px;
+    --window-top: 20px;
+}
+
+* { box-sizing: border-box; user-select: none; }
+body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: var(--bg-dark); font-family: 'Segoe UI', sans-serif; color: var(--text-main); }
+
+#viewport { position: absolute; width: 100%; height: 100%; z-index: 0; }
+
+/* --- Floating Windows --- */
+.floating-window {
+    position: fixed;
+    background-color: var(--bg-panel);
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    padding: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    overflow: hidden;
+}
+
+.floating-window.hidden {
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.window-title {
+    padding: 15px 20px 0 20px;
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--text-main);
+    flex-shrink: 0;
+}
+
+/* Side Panels */
+#window-code {
+    top: var(--window-top);
+    height: calc(100% - var(--dock-height) - var(--window-top) - 20px);
+    width: calc(50% - (var(--window-margin) * 1.5));
+    left: var(--window-margin);
+    padding: 0px;
+}
+
+#window-result {
+    top: var(--window-top);
+    height: calc(100% - var(--dock-height) - var(--window-top) - 20px);
+    width: calc(50% - (var(--window-margin) * 1.5));
+    right: var(--window-margin);
+    padding: 0px;
+}
+
+/* --- ASSETS WINDOW (Compact Layout) --- */
+#window-assets {
+    top: var(--window-top);
+    height: calc(100% - var(--dock-height) - var(--window-top) - 20px);
+    width: calc(50% - (var(--window-margin) * 1.5));
+    right: var(--window-margin);
+}
+
+#window-assets .window-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 15px;
+    overflow-y: hidden;
+}
+
+#asset-preview-container {
+    width: 100%;
+    height: auto;
+    flex-grow: 1;
+    min-height: 200px;
+    background: #000;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+/* Assets Controls Wrapper (Tight Spacing) */
+.assets-controls {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Controls spacing here */
+}
+
+/* Override global margins for Assets to avoid double spacing */
+.assets-controls input,
+.assets-controls select,
+.assets-controls .action-btn {
+    margin-bottom: 0;
+}
+
+/* --- HOME WINDOW --- */
+#window-home {
+    top: var(--window-top);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: calc(100% - var(--dock-height) - var(--window-top) - 20px);
+    display: flex;
+    flex-direction: column;
+}
+
+.home-hero {
+    width: 100%;
+    height: 240px;
+    background-color: #000;
+    flex-shrink: 0;
+    border-bottom: 1px solid #333;
+}
+.home-hero img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+
+.home-content-wrapper { flex-grow: 1; overflow-y: auto; padding: 20px; }
+.home-layout { display: flex; gap: 30px; height: 100%; }
+.home-col { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+.group-separator { border-top: 1px solid #3e3e42; margin-top: 10px; padding-top: 20px; }
+
+/* Inputs & Forms (Global Defaults with Spacing) */
+.section { margin-bottom: 15px; }
+.row { display: flex; flex-direction: column; gap: 10px; }
+.section label { display: block; color: var(--text-muted); font-size: 0.85em; margin-bottom: 6px; font-weight: 600; }
+.section-title { color: #fff; font-size: 1em; margin-bottom: 10px; font-weight: 600; display: block; }
+
+input[type="text"], input[type="number"], select {
+    width: 100%;
+    background: var(--bg-input);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px; /* Restore spacing for Home */
+    font-size: 0.9em;
+}
+input:focus { outline: 2px solid var(--accent); }
+
+.action-btn {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95em;
+    transition: background 0.2s;
+    text-align: center;
+    font-weight: 600;
+    display: block;
+    width: auto;
+}
+.action-btn:hover { background-color: var(--accent-hover); }
+
+/* Force Full Width Helper */
+.action-btn.full-width { width: 100%; }
+
+/* File Input as Button */
+.file-upload-btn {
+    display: block;
+    width: 100%; /* Ensure full width */
+    background: #2a2a2a;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    border: 1px dashed #555;
+    transition: all 0.2s;
+    margin-bottom: 10px;
+}
+.file-upload-btn:hover { border-color: var(--accent); color: #fff; background: #333; }
+input[type="file"] { display: none; }
+
+/* Transform Grid in Assets */
+.transform-grid {
+    display: grid;
+    grid-template-columns: 30px 1fr 1fr 1fr;
+    gap: 5px;
+    align-items: center;
+    font-size: 0.8em;
+    color: var(--text-muted);
+    background: #2a2a2a;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 0;
+}
+/* No margins inside grid inputs */
+.transform-grid input { margin-bottom: 0; }
+
+/* Le container doit prendre toute la hauteur et être flexible */
+#window-code .window-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /* Override padding: 0 from .no-padding class if necessary, 
+       but here we want padding inside the container for the toolbar */
+    padding: 10px; 
+    overflow: hidden;
+}
+
+.code-toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+}
+
+.code-toolbar select {
+    flex-grow: 1;
+    margin-bottom: 0; /* Reset global margin */
+}
+
+.code-toolbar button {
+    flex-shrink: 0;
+    margin-bottom: 0; /* Reset global margin */
+    width: auto;
+}
+
+#monaco-editor-root {
+    border: 1px solid #333;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* --- Custom Graphs Styles --- */
+/* --- Custom Graphs Styles --- */
+#window-result .window-content {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.graphs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+    flex-grow: 1;
+    padding-right: 5px;
+    min-height: 0; 
+}
+
+.graph-card {
+    background: #1e1e1e;
+    border: 1px solid #3e3e42;
+    border-radius: 6px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0; 
+}
+
+.graph-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85em;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-main);
+}
+
+.graph-title {
+    color: #fff;
+}
+
+.graph-legend {
+    display: flex;
+    gap: 10px;
+    font-size: 0.75em;
+    color: var(--text-muted);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.legend-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.graph-canvas {
+    width: 100%;
+    background: #111;
+    border-radius: 4px;
+}
+
+/* Bottom Dock */
+#bottom-dock {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dock-bg);
+    border-radius: 50px;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    height: 60px;
+}
+
+.dock-section { display: flex; align-items: center; gap: 8px; }
+.separator { width: 1px; height: 24px; background: #444; }
+
+.dock-btn {
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 10px;
+    transition: background 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dock-btn svg { width: 100%; height: 100%; fill: var(--text-main); }
+.dock-btn:hover { background: rgba(255,255,255,0.1); }
+.dock-btn.active svg { fill: var(--accent); }
+
+.tick-control {
+    display: flex;
+    align-items: center;
+    background: var(--bg-input);
+    border-radius: 20px;
+    padding: 2px 8px;
+    gap: 5px;
+}
+.mini-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mini-btn svg { fill: var(--text-muted); width: 100%; height: 100%; }
+.mini-btn:hover svg { fill: white; }
+#tick-display { font-size: 0.8em; min-width: 50px; text-align: center; font-variant-numeric: tabular-nums; }

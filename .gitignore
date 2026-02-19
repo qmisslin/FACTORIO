@@ -1,0 +1,26 @@
+# ---- macOS ----
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# ---- Editor ----
+.vscode/
+.idea/
+
+# ---- Logs ----
+*.log
+
+# ---- Blender ----
+*.blend1
+*.blend2
+
+# ---- Local specs ----
+specs.md
+
+# ---- Optional future ----
+node_modules/
+dist/
+build/
