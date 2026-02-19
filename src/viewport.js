@@ -47,7 +47,9 @@ export class Viewport {
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.1;
         this.controls.maxPolarAngle = Math.PI / 2 - 0.05;
-        this.controls.zoomSpeed = 5.0;
+        this.controls.zoomSpeed = 2.0;
+        this.controls.minDistance = 2;
+        this.controls.maxDistance = 100;
 
         this.gridHelper = new THREE.GridHelper(50, 50, 0x888888, 0x333333);
         this.scene.add(this.gridHelper);
@@ -61,6 +63,12 @@ export class Viewport {
         this.scene.add(this.axesHelper);
 
         window.addEventListener('resize', () => this.onResize());
+
+        this.renderer.domElement.addEventListener('dblclick', () => {
+            this.camera.position.set(10, 15, 10);
+            this.controls.target.set(0, 0, 0);
+            this.controls.update();
+        });
     }
 
     clear() {
