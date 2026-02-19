@@ -64,6 +64,7 @@ export class Viewport {
 
         window.addEventListener('resize', () => this.onResize());
 
+        // reset camera
         this.renderer.domElement.addEventListener('dblclick', () => {
             this.camera.position.set(10, 15, 10);
             this.controls.target.set(0, 0, 0);
