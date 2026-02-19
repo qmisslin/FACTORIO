@@ -2,7 +2,7 @@
 
 ---
 
-# Partie 1 — Prise en main (45 min)
+# Partie 1 — Prise en main
 
 ## Exercice 1 — Premier flux minimal
 
@@ -15,7 +15,6 @@ Source → Sink
 
 1. Créer un `Product` nommé **Box**
 2. Lui attribuer :
-
    * un prix
    * un asset
 3. Créer une `Source`
@@ -47,7 +46,7 @@ Observer :
 
 ---
 
-# Partie 2 — Buffers et pertes (45 min)
+# Partie 2 — Buffers et pertes
 
 ## Exercice 3 — Création d’un buffer
 
@@ -82,7 +81,7 @@ Modifier les durées et comparer.
 
 ---
 
-# Partie 3 — Recettes et assemblage (1h)
+# Partie 3 — Recettes et assemblage
 
 ## Exercice 5 — Machine avec recette
 
@@ -118,7 +117,7 @@ Observer :
 
 ---
 
-# Partie 4 — Défauts et pannes (45 min)
+# Partie 4 — Défauts et pannes
 
 ## Exercice 7 — Produits défectueux
 
@@ -152,7 +151,7 @@ Analyser :
 
 ---
 
-# Partie 5 — Optimisation (30 min)
+# Partie 5 — Optimisation
 
 ## Exercice 9 — Doublement du poste critique
 
@@ -186,7 +185,7 @@ Présenter :
 
 ---
 
-# Partie 6 — Mini projet final (15–30 min)
+# Partie 6 — Mini projet final
 
 ## Cas industriel libre
 
@@ -203,4 +202,3 @@ Livrable :
 * analyse du débit en excel
 * analyse du profit en excel
 * identification des goulots dans excel
-
