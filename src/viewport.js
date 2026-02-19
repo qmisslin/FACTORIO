@@ -47,7 +47,7 @@ export class Viewport {
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.1;
         this.controls.maxPolarAngle = Math.PI / 2 - 0.05;
-        this.controls.zoomSpeed = 30.0;
+        this.controls.zoomSpeed = 5.0;
 
         this.gridHelper = new THREE.GridHelper(50, 50, 0x888888, 0x333333);
         this.scene.add(this.gridHelper);
