@@ -7,13 +7,20 @@ and visualize production, failures, losses and profit in real time.
 
 ---
 
-## 🌐 Live Demo
+## Live Demo
 
-👉 https://qmisslin.github.io/FACTORIO/
+https://qmisslin.github.io/FACTORIO/
 
 ---
 
-## 🚀 Features
+## Documentation
+
+- [API Tutorial](./tutorial.md)
+- [Exercises](./exercices.md)
+
+---
+
+## Features
 
 - 3D factory visualization
 - Custom asset import (GLB)
@@ -26,7 +33,7 @@ and visualize production, failures, losses and profit in real time.
 
 ---
 
-## 🏗 Project Structure
+## Project Structure
 
 ```
 
@@ -39,13 +46,15 @@ and visualize production, failures, losses and profit in real time.
 │   ├── viewport.js
 │   ├── ...
 ├── index.html
+├── tutorial.md
+├── exercices.md
 └── specs.md
 
 ````
 
 ---
 
-## 🛠 Development
+## Development
 
 To run locally:
 
@@ -61,13 +70,13 @@ http://localhost:8000
 
 ---
 
-## 📦 Deployment
+## Deployment
 
-This project is automatically deployed via **GitHub Pages**
+This project is automatically deployed via GitHub Pages
 from the `main` branch.
 
 ---
 
-## 👤 Author
+## Author
 
 Quentin Misslin
