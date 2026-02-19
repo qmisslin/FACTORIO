@@ -52,7 +52,7 @@ Observer :
 
 Créer :
 
-Source → Buffer (capacity 5) → Delivery
+Source → Buffer (capacity 5) → Product process → Delivery
 
 Observer :
 
@@ -70,7 +70,7 @@ Questions :
 
 Créer deux machines en série :
 
-Source A (duration 2) → Source B (duration 6) → Delivery
+Source A (duration 2) → Stock → Source B (duration 6) → Delivery
 
 Identifier :
 
@@ -89,6 +89,7 @@ Créer :
 
 * Product A (Raw)
 * Product B (Finished)
+* Une source de Raw
 * Un stock de Raw
 * Une machine qui consomme 2 Raw pour produire 1 Finished
 
